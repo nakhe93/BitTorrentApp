@@ -19,6 +19,7 @@ public class TorrentLogger {
     	if(!log.exists()) 
     		log.createNewFile();
     	
+    		//appends to existing file
 	    	FileOutputStream appendLog = new FileOutputStream(log, true); 
 	    	appendLog.write(logString.getBytes());
 	    	appendLog.flush();
@@ -72,15 +73,15 @@ public class TorrentLogger {
 		writeLogToFile("log_peer_" + peerId + ".log", log);
 	}
 	
-	public void unchoke(int peer1Id, int peer2Id) {
-		String log = String.format("%s: Peer %s is unchoked by %s.\n", 
+	public void choke(int peer1Id, int peer2Id) {
+		String log = String.format("%s: Peer %s is choked by %s.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", log);
 	}
 	
-	public void choke(int peer1Id, int peer2Id) {
-		String log = String.format("%s: Peer %s is choked by %s.\n", 
+	public void unchoke(int peer1Id, int peer2Id) {
+		String log = String.format("%s: Peer %s is unchoked by %s.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", log);

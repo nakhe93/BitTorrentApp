@@ -2,6 +2,8 @@ package com.p2p.bitorr;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 //This class reads the provided commm.cfg file and sets the appropriate parameters
@@ -38,10 +40,10 @@ public class ConfigFileReader {
 		return pieceSize;
 	}
     
-    public static void parseConfigFile(String filePath){
+    public static void parseConfigFile(Path filePath){
     	
     	try{
-    	Scanner input = new Scanner(new File(filePath));
+    	Scanner input = new Scanner(filePath);
     	while(input.hasNextLine()){
     		
     		String current = input.next();
@@ -72,6 +74,11 @@ public class ConfigFileReader {
                 "Unable to open file '" + 
                 fileName + "'");                
         }
+    	catch(IOException ex){
+    		System.out.println(
+                    "Error in reading file '" + 
+                    fileName + "'");  
+    	}
     	
     }
     
