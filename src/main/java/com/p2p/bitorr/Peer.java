@@ -1,5 +1,6 @@
 package com.p2p.bitorr;
 
+// Class to represent properties of peer
 public class Peer {
 	
 	private int peerId;
