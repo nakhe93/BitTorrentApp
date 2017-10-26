@@ -1,2 +1,7 @@
+javac ConfigFileReader.java
+javac HandShakeMaker.java
+javac MessageMaker.java
+javac TorrentLogger.java
+javac Peer.java
 javac RemotePeerInfo.java
 javac StartRemotePeers.java

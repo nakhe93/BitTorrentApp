@@ -1,5 +1,6 @@
+package com.p2p.bitorr;
 /*
- *                     CEN5501C Project2
+ *                   
  * This is the program starting remote processes.
  * This program was only tested on CISE SunOS environment.
  * If you use another environment, for example, linux environment in CISE 
