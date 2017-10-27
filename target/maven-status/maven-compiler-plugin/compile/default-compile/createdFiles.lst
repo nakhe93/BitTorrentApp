@@ -1,8 +1,0 @@
-com\p2p\bitorr\TorrentLogger.class
-com\p2p\bitorr\MessageMaker.class
-com\p2p\bitorr\HandShakeMaker.class
-com\p2p\bitorr\ConfigFileReader.class
-com\p2p\bitorr\RemotePeerInfo.class
-com\p2p\bitorr\MessageTypeNum.class
-com\p2p\bitorr\StartRemotePeers.class
-com\p2p\bitorr\Peer.class
