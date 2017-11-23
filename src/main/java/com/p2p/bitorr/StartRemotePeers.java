@@ -19,13 +19,13 @@ import java.util.*;
  */
 public class StartRemotePeers {
 
-	public Vector<RemotePeerInfo> peerInfoVector;
+	public List<RemotePeerInfo> peerInfoVector;
 	
 	public void getConfiguration()
 	{
 		String st;
 		int i1;
-		peerInfoVector = new Vector<RemotePeerInfo>();
+		peerInfoVector = new ArrayList<RemotePeerInfo>();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader("PeerInfo.cfg"));
 			while((st = in.readLine()) != null) {
@@ -37,7 +37,7 @@ public class StartRemotePeers {
 			     //}
 		         //System.out.println("tokens end ----");
 			    
-			     peerInfoVector.addElement(new RemotePeerInfo(tokens[0], tokens[1], tokens[2]));
+			     peerInfoVector.add(new RemotePeerInfo(tokens[0], tokens[1], tokens[2], tokens[3]));
 			
 			}
 			
@@ -62,7 +62,7 @@ public class StartRemotePeers {
 			
 			// start clients at remote hosts
 			for (int i = 0; i < myStart.peerInfoVector.size(); i++) {
-				RemotePeerInfo pInfo = (RemotePeerInfo) myStart.peerInfoVector.elementAt(i);
+				RemotePeerInfo pInfo = (RemotePeerInfo) myStart.peerInfoVector.get(i);
 				
 				System.out.println("Start remote peer " + pInfo.peerId +  " at " + pInfo.peerAddress );
 				

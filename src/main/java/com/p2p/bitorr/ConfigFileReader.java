@@ -15,6 +15,7 @@ public class ConfigFileReader {
 	private static String fileName;
     private static int fileSize;
     private static int pieceSize;
+    private static int numberOfPieces;
     
 	public static int getNumberOfPreferredNeighbors() {
 		return numberOfPreferredNeighbors;
@@ -38,6 +39,10 @@ public class ConfigFileReader {
 
 	public static int getPieceSize() {
 		return pieceSize;
+	}
+	
+	public static ConfigFileReader getInstance(){
+		return new ConfigFileReader();
 	}
     
     public static void parseConfigFile(Path filePath){
@@ -65,6 +70,8 @@ public class ConfigFileReader {
     		
     		else if(current == "PieceSize")
     			pieceSize = input.nextInt();
+    		
+    		numberOfPieces = (int)Math.ceil((double)fileSize/pieceSize);
     	}
     	input.close();
     		
@@ -81,5 +88,13 @@ public class ConfigFileReader {
     	}
     	
     }
+
+	public static int getNumberOfPieces() {
+		return numberOfPieces;
+	}
+
+	public static void setNumberOfPieces(int numberOfPieces) {
+		ConfigFileReader.numberOfPieces = numberOfPieces;
+	}
     
 }

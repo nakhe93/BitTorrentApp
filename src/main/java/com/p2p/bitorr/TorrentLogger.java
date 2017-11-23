@@ -8,8 +8,17 @@ public class TorrentLogger {
 	
     private static SimpleDateFormat dateI;
     private static TorrentLogger instance = null;
+    private int peerId;
     
-    private TorrentLogger() {}
+    public int getPeerId() {
+		return peerId;
+	}
+
+	public void setPeerId(int peerId) {
+		this.peerId = peerId;
+	}
+
+	private TorrentLogger() {}
     
     private synchronized void writeLogToFile(String filename, String logString) {
     	try {
