@@ -1,4 +1,8 @@
 package com.p2p.bitorr;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.BitSet;
@@ -17,6 +21,7 @@ public class PeerManager {
 	private static String fileName;
     private static int fileSize;
     private static int pieceSize;
+    private static int numPieces;
     private BitSet pieceDetails;
     private PeerConnection[] connections;
 	
@@ -37,6 +42,7 @@ public class PeerManager {
         this.fileSize = cfr.getFileSize();
         this.fileName = cfr.getFileName();
         this.pieceSize = cfr.getPieceSize();
+        this.numPieces = cfr.getNumberOfPieces();
         this.pieceDetails = new BitSet(cfr.getNumberOfPieces());
 	}
 	
@@ -44,8 +50,9 @@ public class PeerManager {
 		int numPeers = peers.size();
 		connections = new PeerConnection[numPeers];
 		
-		RemotePeerInfo currentPeer;
+		RemotePeerInfo currentPeer = null;
 		int currentPeerIndex = 0;
+		
 		
 		for(int i = 0; i < numPeers; i++){
 			if(peerId == Integer.parseInt(peers.get(i).peerId)){
@@ -54,12 +61,46 @@ public class PeerManager {
 			}				
 		}
 		
+		if(currentPeer.hasFile)
+			pieceDetails.set(0,numPieces-1);
+		
+		//create socket with peers which have been started before(client)
 		for(int i = 0; i < currentPeerIndex; i++){
-			
+			try {
+				Socket socket = new Socket(peers.get(i).getPeerAddress(),Integer.parseInt(peers.get(i).getPeerPort()));
+				PeerConnection connection = new PeerConnection(socket,currentPeer,pieceDetails,peers,peers.get(i));
+				new Thread(connection).start();
+				
+			} catch (NumberFormatException e) {
+				
+				e.printStackTrace();
+			} catch (UnknownHostException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+					
 		}
 		
+		//create socket with peers which would start later(socket)
 		for(int i = currentPeerIndex + 1; i < numPeers; i++){
-			
+			try {
+				ServerSocket serverSocket = new ServerSocket(Integer.parseInt(currentPeer.getPeerPort()));
+				PeerConnection connection = new PeerConnection(serverSocket,currentPeer,pieceDetails,peers,peers.get(i));
+				new Thread(connection).start();
+				
+			} catch (NumberFormatException e) {
+				
+				e.printStackTrace();
+			} catch (UnknownHostException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
 		}
 		
 		Timer preferredNeighborTimer = new Timer();

@@ -4,10 +4,10 @@ import java.nio.ByteBuffer;
 
 //This class contains method to construct the initial handshake message
 public class HandShakeMaker {
-	private int handShakeLength = 32;
+	private static int handShakeLength = 32;
 	private HandShakeMaker(){}
 	
-	public byte[] makeHandShake(int peerId){
+	public static byte[] makeHandShake(int peerId){
 		ByteBuffer handshake = ByteBuffer.allocate(handShakeLength);
 		handshake.put("P2PFILESHARINGPROJ".getBytes());
 		handshake.putInt(18, 0);

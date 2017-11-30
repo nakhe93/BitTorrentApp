@@ -13,6 +13,39 @@ public class RemotePeerInfo {
 	public String peerAddress;
 	public String peerPort;
 	public boolean hasFile;
+	public String getPeerId() {
+		return peerId;
+	}
+
+	public void setPeerId(String peerId) {
+		this.peerId = peerId;
+	}
+
+	public String getPeerAddress() {
+		return peerAddress;
+	}
+
+	public void setPeerAddress(String peerAddress) {
+		this.peerAddress = peerAddress;
+	}
+
+	public String getPeerPort() {
+		return peerPort;
+	}
+
+	public void setPeerPort(String peerPort) {
+		this.peerPort = peerPort;
+	}
+
+	public boolean isHasFile() {
+		return hasFile;
+	}
+
+	public void setHasFile(boolean hasFile) {
+		this.hasFile = hasFile;
+	}
+
+	
 	
 	public RemotePeerInfo(String pId, String pAddress, String pPort, String hasFile) {
 		peerId = pId;
