@@ -7,6 +7,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.BitSet;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Timer;
 
 public class PeerManager {
@@ -23,6 +24,7 @@ public class PeerManager {
     private static int pieceSize;
     private static int numPieces;
     private BitSet pieceDetails;
+    private static PriorityQueue<RemotePeerInfo> downloadQueue;
     private PeerConnection[] connections;
 	
 	public PeerManager(){		
@@ -44,6 +46,8 @@ public class PeerManager {
         this.pieceSize = cfr.getPieceSize();
         this.numPieces = cfr.getNumberOfPieces();
         this.pieceDetails = new BitSet(cfr.getNumberOfPieces());
+        
+        this.downloadQueue = new PriorityQueue<RemotePeerInfo>();
 	}
 	
 	public void createPeerAndConnections(int peerId){
@@ -104,7 +108,11 @@ public class PeerManager {
 		}
 		
 		Timer preferredNeighborTimer = new Timer();
-        preferredNeighborTimer.schedule(new PreferredNeighborManager(numberOfPreferredNeighbors),0,unchokingInterval*1000);		
+        preferredNeighborTimer.schedule(new PreferredNeighborsManager(numberOfPreferredNeighbors,currentPeer),0,unchokingInterval*1000);		
+	}
+
+	public PriorityQueue<RemotePeerInfo> getQueue() {
+		return downloadQueue;
 	}
 	
 }

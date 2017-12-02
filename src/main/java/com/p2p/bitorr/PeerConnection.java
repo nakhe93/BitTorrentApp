@@ -12,6 +12,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PeerConnection implements Runnable{
 	private Socket socket;
+	public AtomicBoolean getTerminationCond() {
+		return terminationCond;
+	}
+
+	public void setTerminationCond(AtomicBoolean terminationCond) {
+		this.terminationCond = terminationCond;
+	}
+
 	private Socket connectionSocket;
 	private ServerSocket serverSocket;
 	private RemotePeerInfo currPeer;
@@ -19,7 +27,7 @@ public class PeerConnection implements Runnable{
 	private ObjectOutputStream outStream;
 	private TorrentLogger logger;
 	private BitSet pieceDetails;
-	private AtomicBoolean termination;
+	private AtomicBoolean terminationCond;
 	private static List<RemotePeerInfo> peers;
 	private RemotePeerInfo remotePeer;
 	private boolean isClient;
@@ -28,20 +36,25 @@ public class PeerConnection implements Runnable{
 	public void run() {
 		try {
 			if(isClient){
+				this.logger.TCPConnectToPeer(Integer.parseInt(currPeer.getPeerId()), Integer.parseInt(remotePeer.getPeerId()));
 				outStream.writeObject(HandShakeMaker.makeHandShake(Integer.parseInt(currPeer.getPeerId())));
 				byte[] handShake = (byte[])inStream.readObject();
+				
 			}
 			else{
+				this.logger.TCPConnectFromPeer(Integer.parseInt(currPeer.getPeerId()), Integer.parseInt(remotePeer.getPeerId()));
 				byte[] handShake = (byte[])inStream.readObject();
 				outStream.writeObject(HandShakeMaker.makeHandShake(Integer.parseInt(currPeer.getPeerId())));
 			}
 			
-			MessageHandler messageHandler = new MessageHandler();
+			MessageHandler messageHandler = new MessageHandler(currPeer,remotePeer,peers);
 			sendMessage(MessageMaker.makeMessage(MessageTypeNum.BITFIELD,new byte[(pieceDetails.length() + 7) / 8]));
 					
-			while (!termination.get()) {
+			while (!terminationCond.get()) {
 				byte[] incomingMessage = (byte[])inStream.readObject();
 				byte[] response = messageHandler.createMessage(incomingMessage,remotePeer);
+				
+				if(response != null)
 				sendMessage(response);
 			}
 			
@@ -72,7 +85,7 @@ public class PeerConnection implements Runnable{
 		this.peers = peers;
 		this.remotePeer = remotePeer;
 		this.logger = TorrentLogger.getInstance();
-		this.termination = new AtomicBoolean(false);
+		this.terminationCond = new AtomicBoolean(false);
 		this.isClient = true;
 		try {
 			this.outStream = new ObjectOutputStream(socket.getOutputStream());
@@ -99,7 +112,7 @@ public class PeerConnection implements Runnable{
 		this.peers = peers;
 		this.remotePeer = remotePeer;
 		this.logger = TorrentLogger.getInstance();
-		this.termination = new AtomicBoolean(false);
+		this.terminationCond = new AtomicBoolean(false);
 		this.isClient = false;
 		try {
 			this.connectionSocket = serverSocket.accept();

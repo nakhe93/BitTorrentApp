@@ -21,4 +21,6 @@ public enum MessageTypeNum {
 		return msgNum;
 	}
 	
+	
+	
 }

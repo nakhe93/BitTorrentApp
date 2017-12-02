@@ -1,4 +1,7 @@
 package com.p2p.bitorr;
+
+import java.util.Arrays;
+
 /*
  *                     CEN5501C Project2
  * This is the program starting remote processes.
@@ -13,6 +16,7 @@ public class RemotePeerInfo {
 	public String peerAddress;
 	public String peerPort;
 	public boolean hasFile;
+	public boolean[] pieceAvailable;
 	public String getPeerId() {
 		return peerId;
 	}
@@ -52,9 +56,31 @@ public class RemotePeerInfo {
 		peerAddress = pAddress;
 		peerPort = pPort;
 		
-		if(Integer.parseInt(hasFile) == 1)
-		   this.hasFile = true;
-		else
+		if(Integer.parseInt(hasFile) == 1){
+			this.hasFile = true;
+			Arrays.fill(pieceAvailable, true);
+		}
+		   
+		else{
 			this.hasFile = false;
+			Arrays.fill(pieceAvailable, false);
+		}
+			
+	}
+
+	public boolean[] getPieceAvailable() {
+		return pieceAvailable;
+	}
+
+	public void setPieceAvailable(boolean[] pieceAvailable) {
+		this.pieceAvailable = pieceAvailable;
+	}
+	
+	public boolean ifPieceAvailable(int i){
+		return pieceAvailable[i];
+	}
+	
+	public void setPiece(int i, boolean value){
+		pieceAvailable[i] = value;
 	}
 }

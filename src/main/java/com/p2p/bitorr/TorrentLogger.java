@@ -47,58 +47,58 @@ public class TorrentLogger {
     }
     
     public void TCPConnectFromPeer(int peer1Id, int peer2Id) {
-		String log = String.format("%s: Peer %s is connected from Peer %s.\n", 
+		String log = String.format("%s: Peer %d is connected from Peer %d.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		writeLogToFile("log_peer_" + peer1Id + ".log", log);
 	}
     
     public void TCPConnectToPeer(int peer1Id, int peer2Id) {
- 		String log = String.format("%s: Peer %s makes a connection to Peer %s.\n", 
+ 		String log = String.format("%s: Peer %d makes a connection to Peer %d.\n", 
  			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
  		writeLogToFile("log_peer_" + peer1Id + ".log", log);
     }
     
 		
-	public void changeOfPrefNeighbors(String peerId, String[] neighborId) {
+	public void changeOfPrefNeighbors(int peerId, int[] neighborId) {
 		String delimiter = "";
 		StringBuilder neighborList = new StringBuilder();
 		
-		for(String s : neighborId) {
+		for(int s : neighborId) {
 			neighborList = neighborList.append(delimiter + s);
 			delimiter = ", ";
 		}
 		
-		String log = String.format("%s: Peer %s has the preferred neighbors %s.\n", 
+		String log = String.format("%s: Peer %d has the preferred neighbors %d.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peerId, neighborList);
 		
 		writeLogToFile("log_peer_" + peerId + ".log", log);
 	}
 	
 	public void changeOfOUNeighbor(int peerId, int neighborId) {
-		String log = String.format("%s: Peer %s has the optimistically unchoked neighbor " 
-			+ "%s.\n", 
+		String log = String.format("%s: Peer %d has the optimistically unchoked neighbor " 
+			+ "%d.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peerId, neighborId);
 		
 		writeLogToFile("log_peer_" + peerId + ".log", log);
 	}
 	
 	public void choke(int peer1Id, int peer2Id) {
-		String log = String.format("%s: Peer %s is choked by %s.\n", 
+		String log = String.format("%s: Peer %d is choked by %d.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", log);
 	}
 	
 	public void unchoke(int peer1Id, int peer2Id) {
-		String log = String.format("%s: Peer %s is unchoked by %s.\n", 
+		String log = String.format("%s: Peer %d is unchoked by %d.\n", 
 			dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", log);
 	}
 	
 	public void receiveHave(int peer1Id, int peer2Id, int piece) {
-		String logString = String.format("%s: Peer %s received the 'have' message from %s for the " 
-			+ "piece %s.\n", dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id, piece);
+		String logString = String.format("%s: Peer %d received the 'have' message from %d for the " 
+			+ "piece %d.\n", dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id, piece);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", logString);
 	}
@@ -111,24 +111,24 @@ public class TorrentLogger {
 	}
 	
 	public void receiveNotInterested(int peer1Id, int peer2Id) {
-		String logString = String.format("%s: Peer %s received the 'not interested' message from "
-			+ "%s.\n", dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
+		String logString = String.format("%s: Peer %d received the 'not interested' message from "
+			+ "%d.\n", dateI.format(Calendar.getInstance().getTime()), peer1Id, peer2Id);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", logString);
 	}
 	
 	public void downloadPiece(int peer1Id, int pieceIndex, int peer2Id, int numberPieces) {
-		String logString = String.format("%s: Peer %s has downloaded the piece %s from %s. Now "  
-			+ "the number of pieces it has is %s\n", dateI.format(Calendar.getInstance().getTime()), 
+		String logString = String.format("%s: Peer %s has downloaded the piece %d from %d. Now "  
+			+ "the number of pieces it has is %d\n", dateI.format(Calendar.getInstance().getTime()), 
 			peer1Id, pieceIndex, peer2Id, numberPieces);
 		
 		writeLogToFile("log_peer_" + peer1Id + ".log", logString);
 	}
 	
-	public void downloadFile(int pid) {
-		String logString = String.format("%s: Peer %s has has downloaded the complete file.\n", 
-			dateI.format(Calendar.getInstance().getTime()), pid);
+	public void downloadFile(int peerId) {
+		String logString = String.format("%s: Peer %d has has downloaded the complete file.\n", 
+			dateI.format(Calendar.getInstance().getTime()), peerId);
 		
-		writeLogToFile("log_peer_" + pid + ".log", logString);
+		writeLogToFile("log_peer_" + peerId + ".log", logString);
 	 }
 }
