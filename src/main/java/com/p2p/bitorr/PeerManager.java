@@ -4,7 +4,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -67,6 +69,8 @@ public class PeerManager {
 		
 		if(currentPeer.hasFile)
 			pieceDetails.set(0,numPieces-1);
+		else
+			splitFileToPieces(currentPeer);
 		
 		//create socket with peers which have been started before(client)
 		for(int i = 0; i < currentPeerIndex; i++){
@@ -109,6 +113,36 @@ public class PeerManager {
 		
 		Timer preferredNeighborTimer = new Timer();
         preferredNeighborTimer.schedule(new PreferredNeighborsManager(numberOfPreferredNeighbors,currentPeer),0,unchokingInterval*1000);		
+	}
+
+	private void splitFileToPieces(RemotePeerInfo currPeer) {
+		Path filePath = FileSystems.getDefault().getPath("peer_" + currPeer.getPeerId());
+        try {
+			Files.createDirectories(filePath);
+			
+			for(int i = 0; i < numPieces; ++i){
+	            int beginIdx = pieceSize;int lastIdx;
+	            if(i != numPieces - 1)
+	            	lastIdx = (i+1)*pieceSize - 1;
+	            else
+	            	lastIdx = fileSize - beginIdx;
+	            
+	            try {
+					Files.write(filePath.resolve(String.valueOf(i)),
+					Arrays.copyOfRange(Files.readAllBytes(filePath), beginIdx, lastIdx));
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+	        }
+			
+		} catch (IOException e1) {
+			
+			e1.printStackTrace();
+		}
+	        
+        
+		
 	}
 
 	public PriorityQueue<RemotePeerInfo> getQueue() {
